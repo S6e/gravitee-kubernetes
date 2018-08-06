@@ -1,0 +1,6 @@
+dependencies:
+  - name: mongodb-replicaset
+    version: 3.5.2
+    repository: "@stable"
+    alias: mongodb
+    condition: mongodb.enabled
