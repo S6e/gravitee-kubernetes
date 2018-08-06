@@ -26,10 +26,11 @@ inMemoryAuth:
   enabled: true
 
 mongo:
-  rs: rs
+  enabled: true
+  rs: mongodb-rs 
   rsEnabled: true
-  dbhost: mongo-rs-mongodb-replicaset
-  dbname: gravitee
+  dbhost: api-gateway-mongodb
+  dbname: 
   dbport: 27017
 
 es:
@@ -49,14 +50,14 @@ api:
   replicaCount: 1
   image:
     repository: graviteeio/management-api
-    tag: 1.15.0
+    tag: 1.15.5
     pullPolicy: Always
   service:
     type: ClusterIP
     externalPort: 83
     internalPort: 8083
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 2
     maxReplicas: 3
     targetAverageUtilization: 50
@@ -64,7 +65,7 @@ api:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - api-manager.example.com
+      - api-manager.local
     annotations:
       kubernetes.io/ingress.class: nginx
       ingress.kubernetes.io/configuration-snippet: "gzip off;\netag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
@@ -90,17 +91,17 @@ api:
 gateway:
   type: Deployment
   name: gateway
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: graviteeio/gateway
-    tag: 1.15.0
+    tag: 1.15.5
     pullPolicy: Always
   service:
     type: ClusterIP
     externalPort: 82
     internalPort: 8082
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 2
     maxReplicas: 6
     targetAverageUtilization: 50
@@ -108,7 +109,7 @@ gateway:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - api.example.com
+      - api.local
     annotations:
       kubernetes.io/ingress.class: nginx
       ingress.kubernetes.io/configuration-snippet: "gzip off;\netag on;\nproxy_pass_header ETag;\n"
@@ -135,10 +136,10 @@ ui:
   replicaCount: 1
   image:
     repository: graviteeio/management-ui
-    tag: 1.15.0
+    tag: 1.15.5
     pullPolicy: Always
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 2
     maxReplicas: 3
     targetAverageUtilization: 50
@@ -151,7 +152,7 @@ ui:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - developer.example.com
+      - developer.local
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/app-root: /management
@@ -173,3 +174,10 @@ ui:
     requests:
       cpu: 50m
       memory: 64Mi
+
+# Settings for the mongo db subchart
+mongodb:
+  replicaSetName: mongodb-rs
+  persistentVolume:
+    storageClass: security-mongodb-data
+    size: 1Gi
