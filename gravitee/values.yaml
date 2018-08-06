@@ -34,10 +34,10 @@ mongo:
   dbport: 27017
 
 es:
+  enabled: false
   protocol: http
-  cluster: elasticsearch
-  index: gravitee
-  host: elasticsearch-elasticsearch-client
+  cluster: elastic
+  host: elasticsearch-elastic
   port: 9200
 
 api:

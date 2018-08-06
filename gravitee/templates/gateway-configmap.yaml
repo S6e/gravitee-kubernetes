@@ -48,15 +48,7 @@ data:
         buffersize: 4096 # Must be a power of 2
       # Elasticsearch reporter
       elasticsearch:
-        enabled: true # Is the reporter enabled or not (default to true)
-        endpoints:
-          - {{ .Values.es.protocol }}://{{ .Values.es.host }}:{{ .Values.es.port }}
-        index: {{ .Values.es.index }}
-        cluster: {{ .Values.es.cluster }}
-        bulk:
-          actions: 200           # Number of requests action before flush
-          flush_interval: 5       # Flush interval in seconds
-          concurrent_requests: 5  # Concurrent requests
+        enabled: {{ .Values.es.enabled }} # Is the reporter enabled or not (default to true)
     services:
       core:
         http:

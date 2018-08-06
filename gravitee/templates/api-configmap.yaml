@@ -28,8 +28,7 @@ data:
       type: elasticsearch
       elasticsearch:
         endpoints:
-          - {{ .Values.es.protocol }}://{{ .Values.es.host }}:{{ .Values.es.port }}
-        index: {{ .Values.es.index }}
+          -  {{ .Values.es.protocol}}://{{ .Values.es.host }}:{{ .Values.es.port }}
         cluster: {{ .Values.es.cluster }}
     security:
       providers:  # authentication providers
