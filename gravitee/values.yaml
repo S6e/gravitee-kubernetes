@@ -6,17 +6,17 @@ chaos:
 
 oauth:
   enabled: false
-  localLoginDisabled: true
+  localLoginDisabled: false 
   # OAuth2 token validation endpoint url
-  tokenEndpoint: https://auth/realms/default/protocol/openid-connect/token
+  tokenEndpoint: http://keycloak.local/auth/realms/master/protocol/openid-connect/token
   # Authorization endpoint to ask for an authorization_code
-  authorizationEndpoint: https://auth/realms/default/protocol/openid-connect/auth
-  userInfoEndpoint: https://auth/realms/default/protocol/openid-connect/userinfo
-  userLogoutEndpoint: https://uth/realms/default/protocol/openid-connect/logout
+  authorizationEndpoint: http://keycloak.local/auth/realms/master/protocol/openid-connect/auth
+  userInfoEndpoint: http://keycloak.local/auth/realms/master/protocol/openid-connect/userinfo
+  userLogoutEndpoint: http://keycloak.local/auth/realms/master/protocol/openid-connect/logout
   # OAuth2 resource server client id
-  clientId: client
+  clientId: gravitee
   # OAut2 resource server client secret
-  clientSecret: secret
+  clientSecret: 7e8b3f18-1d00-4dc0-98db-600f8a1c82d0
   # Required scope
   scope:
     - profile
@@ -30,14 +30,23 @@ mongo:
   rs: mongodb-rs 
   rsEnabled: true
   dbhost: api-gateway-mongodb
-  dbname: 
+  dbname: test 
   dbport: 27017
+
+# Settings for the mongo db subchart
+mongodb:
+  image:
+    tag: 3.4
+  replicaSetName: mongodb-rs
+  persistentVolume:
+    storageClass: security-mongodb-data
+    size: 1Gi
 
 es:
   enabled: false
   protocol: http
   cluster: elastic
-  host: elasticsearch-elastic
+  host: elasticsearch-gravitee
   port: 9200
 
 api:
@@ -50,10 +59,10 @@ api:
   replicaCount: 1
   image:
     repository: graviteeio/management-api
-    tag: 1.15.5
+    tag: 1.18.1
     pullPolicy: Always
   service:
-    type: ClusterIP
+    type: NodePort
     externalPort: 83
     internalPort: 8083
   autoscaling:
@@ -65,7 +74,7 @@ api:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - api-manager.local
+      - gravitee-api.local
     annotations:
       kubernetes.io/ingress.class: nginx
       ingress.kubernetes.io/configuration-snippet: "gzip off;\netag on;\nproxy_pass_header ETag;\nproxy_set_header if-match \"\";\n"
@@ -94,10 +103,10 @@ gateway:
   replicaCount: 1
   image:
     repository: graviteeio/gateway
-    tag: 1.15.5
+    tag: 1.18.1
     pullPolicy: Always
   service:
-    type: ClusterIP
+    type: NodePort
     externalPort: 82
     internalPort: 8082
   autoscaling:
@@ -109,7 +118,7 @@ gateway:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - api.local
+      - gravitee-gateway.local
     annotations:
       kubernetes.io/ingress.class: nginx
       ingress.kubernetes.io/configuration-snippet: "gzip off;\netag on;\nproxy_pass_header ETag;\n"
@@ -136,7 +145,7 @@ ui:
   replicaCount: 1
   image:
     repository: graviteeio/management-ui
-    tag: 1.15.5
+    tag: 1.18.1
     pullPolicy: Always
   autoscaling:
     enabled: false
@@ -145,14 +154,14 @@ ui:
     targetAverageUtilization: 50
   service:
     name: nginx
-    type: ClusterIP
+    type: NodePort
     externalPort: 8002
     internalPort: 80
   ingress:
     enabled: true
     # Used to create an Ingress record.
     hosts:
-      - developer.local
+      - gravitee-ui.local
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/app-root: /management
@@ -174,10 +183,3 @@ ui:
     requests:
       cpu: 50m
       memory: 64Mi
-
-# Settings for the mongo db subchart
-mongodb:
-  replicaSetName: mongodb-rs
-  persistentVolume:
-    storageClass: security-mongodb-data
-    size: 1Gi

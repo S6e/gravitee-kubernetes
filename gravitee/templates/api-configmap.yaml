@@ -23,7 +23,7 @@ data:
         authentication:
           type: basic
           users:
-            admin: adminadmin
+            admin: admin
     analytics:
       type: elasticsearch
       elasticsearch:
@@ -40,7 +40,7 @@ data:
           tokenEndpoint: {{ .Values.oauth.tokenEndpoint }}
           userInfoEndpoint: {{ .Values.oauth.userInfoEndpoint }}
           accessTokenProperty: access_token
-          authorizationHeader: "Bearer %s"
+          # authorizationHeader"Bearer %s"
           mapping:
             id: sub
             email: email
@@ -86,8 +86,8 @@ data:
         {{- end }}
     # SMTP configuration used to send mails
     email:
-      enabled: true
-      host: smtp.example.com
+      enabled: false
+      host: smtp.gravite-api.local
       subject: "[gravitee] %s"
       port: 25
       from: info@example.com
@@ -130,7 +130,7 @@ data:
           token:
              #expire-after: 86400
     # The portal URL used in emails
-    portalURL: https://{{ index .Values.ui.ingress.hosts 0 }}
+    portalURL: http{{ if $.Values.ui.ingress.tls }}s{{ end }}://{{ index .Values.ui.ingress.hosts 0 }}
 
     # Allows to create support ticket (default value: false)
     support:

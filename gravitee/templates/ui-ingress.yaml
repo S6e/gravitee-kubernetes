@@ -16,6 +16,7 @@ metadata:
       {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
+  type: NodePort
   rules:
     {{- range $host := .Values.ui.ingress.hosts }}
     - host: {{ $host }}
