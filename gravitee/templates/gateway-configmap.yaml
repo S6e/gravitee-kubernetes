@@ -19,7 +19,7 @@ data:
     #  compressionSupported: false
     #  instances: 0
     #  secured: false
-      alpn: true
+      alpn: false
     #  ssl:
     #    clientAuth: false
     #    keystore:

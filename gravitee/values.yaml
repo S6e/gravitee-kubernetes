@@ -58,8 +58,8 @@ api:
     type: RollingUpdate
   replicaCount: 1
   image:
-    repository: graviteeio/management-api
-    tag: 1.18.1
+    repository: s6er/gravitee-api
+    tag: latest
     pullPolicy: Always
   service:
     type: NodePort
@@ -102,8 +102,8 @@ gateway:
   name: gateway
   replicaCount: 1
   image:
-    repository: graviteeio/gateway
-    tag: 1.18.1
+    repository: s6er/gravitee-gateway
+    tag: latest
     pullPolicy: Always
   service:
     type: NodePort
